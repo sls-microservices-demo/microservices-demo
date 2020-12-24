@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: payment
-        image: weaveworksdemos/payment:0.4.3
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/payment:v0.2.3
         resources:
           limits:
             cpu: 100m
@@ -23,6 +23,9 @@ spec:
           requests:
             cpu: 99m
             memory: 100Mi
+        env:
+          - name: OTLP_ENDPOINT
+            value: opentelemetry-collector.opentelemetry-collector:55680
         ports:
         - containerPort: 80
         securityContext:
@@ -39,12 +42,12 @@ spec:
             path: /health
             port: 80
           initialDelaySeconds: 300
-          periodSeconds: 3
+          periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /health
             port: 80
           initialDelaySeconds: 180
-          periodSeconds: 3
+          periodSeconds: 30
       nodeSelector:
         beta.kubernetes.io/os: linux
