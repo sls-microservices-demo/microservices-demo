@@ -15,10 +15,13 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: weaveworksdemos/catalogue:0.3.5
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/catalogue:v0.2.3
         command: ["/app"]
         args:
         - -port=80
+        env:
+          - name: OTLP_ENDPOINT
+            value: opentelemetry-collector.opentelemetry-collector:55680
         resources:
           limits:
             cpu: 100m
@@ -42,12 +45,12 @@ spec:
             path: /health
             port: 80
           initialDelaySeconds: 300
-          periodSeconds: 3
+          periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /health
             port: 80
           initialDelaySeconds: 180
-          periodSeconds: 3
+          periodSeconds: 30
       nodeSelector:
         beta.kubernetes.io/os: linux

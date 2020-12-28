@@ -1,0 +1,103 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: otel-collector-configmap
+ namespace: opentelemetry-collector
+ labels:
+   app: opentelemetry
+   component: otel-collector-conf
+data:
+ otel-collector-config.yaml: |
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+  exporters:
+    alibabacloud_logservice/sls-trace:
+      endpoint: "cn-hangzhou.log.aliyuncs.com"
+      # LogService's Project Name
+      project: "x"
+      # LogService's Logstore Name
+      logstore: "otel-trace"
+      # AlibabaCloud access key id
+      access_key_id: "x"
+      # AlibabaCloud access key secret
+      access_key_secret: "x"
+
+    alibabacloud_logservice/sls-metric:
+      endpoint: "cn-hangzhou.log.aliyuncs.com"
+      # LogService's Project Name
+      project: "x"
+      # LogService's Logstore Name
+      logstore: "otel-metrics"
+      # AlibabaCloud access key id
+      access_key_id: "x"
+      # AlibabaCloud access key secret
+      access_key_secret: "x"
+  service:
+    pipelines:
+      metrics:
+        receivers: [otlp]
+        exporters: [alibabacloud_logservice/sls-metric]
+      traces:
+        receivers: [otlp]
+        exporters: [alibabacloud_logservice/sls-trace]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opentelemetry-collector
+  namespace: opentelemetry-collector
+  labels:
+    app: opentelemetry-collector
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: opentelemetry-collector
+  template:
+    metadata:
+      labels:
+        app: opentelemetry-collector
+    spec:
+      containers:
+      - name: opentelemetry-collector
+        resources:
+          limits:
+            cpu: 3000m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        image: registry.cn-beijing.aliyuncs.com/log-service/opentelemetry-collector:v0.1.0
+        ports:
+        - containerPort: 1888
+          name: pprof
+        - containerPort: 8888
+          name: prometheus
+        - containerPort: 8889
+          name: prom-exp
+        - containerPort: 13133
+          name: health
+        - containerPort: 55680
+          name: grpc-receiver
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          capabilities:
+            drop:
+              - all
+            add:
+              - NET_BIND_SERVICE
+          readOnlyRootFilesystem: true
+        volumeMounts:
+          - name: configs
+            mountPath: /etc/otel/config.yaml
+            subPath: otel-collector-config.yaml
+      volumes:
+        - name: configs
+          configMap:
+            name: otel-collector-configmap
+

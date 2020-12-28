@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: user
-        image: weaveworksdemos/user:0.4.7
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/user:v0.2.4
+        #image: weaveworksdemos/user:0.4.7
         resources:
           limits:
             cpu: 300m
@@ -28,6 +29,8 @@ spec:
         env:
         - name: mongo
           value: user-db:27017
+        - name: OTLP_ENDPOINT
+          value: opentelemetry-collector.opentelemetry-collector:55680
         securityContext:
           runAsNonRoot: true
           runAsUser: 10001
@@ -42,12 +45,12 @@ spec:
             path: /health
             port: 80
           initialDelaySeconds: 300
-          periodSeconds: 3
+          periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /health
             port: 80
           initialDelaySeconds: 180
-          periodSeconds: 3
+          periodSeconds: 30
       nodeSelector:
         beta.kubernetes.io/os: linux
