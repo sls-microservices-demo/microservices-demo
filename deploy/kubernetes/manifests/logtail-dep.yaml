@@ -1,0 +1,46 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logtail
+  labels:
+    name: logtail
+  namespace: logtail
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: logtail
+    spec:
+      containers:
+      - name: logtail-skywalking
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/logtail:latest
+        env:
+          - name: ALIYUN_LOGTAIL_CONFIG
+            value: /etc/ilogtail/conf/cn-beijing-internet/ilogtail_config.json
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 200m
+            memory: 500Mi
+        ports:
+        - containerPort: 80
+        securityContext:
+          capabilities:
+            drop:
+              - all
+            add:
+              - NET_BIND_SERVICE
+          readOnlyRootFilesystem: false
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-volume
+      volumes:
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
+      nodeSelector:
+        beta.kubernetes.io/os: linux

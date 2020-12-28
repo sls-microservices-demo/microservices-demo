@@ -2,42 +2,42 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: orders
+  name: shipping-sw
   labels:
-    name: orders
-    app: orders
+    name: shipping-sw
+    app: shipping
   namespace: sock-shop
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: orders
-        app: orders
+        name: shipping-sw
+        app: shipping
     spec:
       containers:
-      - name: orders
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/orders:sls_0.4
+      - name: shipping
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/shipping:sls_0.5
         env:
          - name: OTEL_RESOURCE_ATTRIBUTES
-           value: service.name=orders
+           value: service.name=shipping
          - name: OTEL_EXPORTER_OTLP_ENDPOINT
            value: opentelemetry-collector.opentelemetry-collector:55680
          - name: ZIPKIN
            value: zipkin.jaeger.svc.cluster.local
          - name: JAVA_OPTS
-           value: -javaagent:/opentelemetry-javaagent.jar -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+           value: -javaagent:/usr/src/app/agent/skywalking-agent.jar -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
         resources:
           limits:
-            cpu: 500m
+            cpu: 300m
             memory: 500Mi
           requests:
-            cpu: 200m
+            cpu: 300m
             memory: 500Mi
         ports:
         - containerPort: 80
         securityContext:
-          # runAsNonRoot: true
+          #runAsNonRoot: true
           # runAsUser: 10001
           capabilities:
             drop:

@@ -2,9 +2,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: orders
+  name: orders-sw
   labels:
-    name: orders
+    name: orders-sw
     app: orders
   namespace: sock-shop
 spec:
@@ -12,12 +12,12 @@ spec:
   template:
     metadata:
       labels:
-        name: orders
+        name: orders-sw
         app: orders
     spec:
       containers:
-      - name: orders
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/orders:sls_0.4
+      - name: orders-sw
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/orders:sls_0.5
         env:
          - name: OTEL_RESOURCE_ATTRIBUTES
            value: service.name=orders
@@ -26,7 +26,7 @@ spec:
          - name: ZIPKIN
            value: zipkin.jaeger.svc.cluster.local
          - name: JAVA_OPTS
-           value: -javaagent:/opentelemetry-javaagent.jar -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+           value: -javaagent:/usr/src/app/agent/skywalking-agent.jar -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
         resources:
           limits:
             cpu: 500m
