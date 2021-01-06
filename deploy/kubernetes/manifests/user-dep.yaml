@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: user
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/user:v0.2.4
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/user:v0.1.5
         #image: weaveworksdemos/user:0.4.7
         resources:
           limits:
