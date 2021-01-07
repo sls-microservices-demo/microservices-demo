@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/catalogue:v0.2.3
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/catalogue:v0.1.5
         command: ["/app"]
         args:
         - -port=80

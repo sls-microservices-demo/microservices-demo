@@ -12,7 +12,7 @@ metadata:
     name: load-test
   namespace: loadtest
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
       - name: load-test
-        image: weaveworksdemos/load-test:0.1.1
-        command: ["/bin/sh"]
-        args: ["-c", "while true; do locust --host http://front-end.sock-shop.svc.cluster.local -f /config/locustfile.py --clients 5 --hatch-rate 5 --num-request 100 --no-web; done"]
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/load-test:v0.1.0
+        command: ["/usr/local/bin/runLocust.sh"]
+        args: ["-c", "1", "-r", "1", "-h", "sock-shop.c0ae5df15fbf34b47ba3a9684e6ee2bee.cn-beijing.alicontainer.com"]
       nodeSelector:
         beta.kubernetes.io/os: linux

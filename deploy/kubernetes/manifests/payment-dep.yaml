@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: payment
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/payment:v0.2.3
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/payment:v0.1.5
         resources:
           limits:
             cpu: 100m
