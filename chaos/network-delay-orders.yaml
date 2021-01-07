@@ -1,0 +1,18 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-delay-orders
+  namespace: sock-shop
+spec:
+  action: delay
+  mode: one
+  selector:
+    labelSelectors:
+      "app": "orders"
+  delay:
+    latency: "2000ms"
+    correlation: "25"
+    jitter: "2000ms"
+  duration: "5s"
+  scheduler:
+    cron: "@every 10s"

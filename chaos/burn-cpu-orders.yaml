@@ -1,0 +1,19 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: burn-cpu-orders
+  namespace: sock-shop
+spec:
+  mode: one
+  selector:
+    labelSelectors:
+      "app": "orders"
+  stressors: 
+    cpu: 
+      workers: 2
+      load: 100
+      options: ["--cpu 4", "--timeout 600", "--hdd 1"]
+  duration: "60s"
+  scheduler:
+    cron: "@every 2m"
+
