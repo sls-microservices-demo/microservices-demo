@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: logtail-skywalking
-        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/logtail:latest
+        image: sls-registry.cn-beijing.cr.aliyuncs.com/sls-microservices/logtail:skywalking
         env:
           - name: ALIYUN_LOGTAIL_CONFIG
             value: /etc/ilogtail/conf/cn-beijing-internet/ilogtail_config.json
