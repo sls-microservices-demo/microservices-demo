@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         name: catalogue-db
+        app: catalogue-db
+        version: v1
     spec:
       containers:
       - name: catalogue-db

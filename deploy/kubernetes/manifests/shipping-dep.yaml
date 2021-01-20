@@ -14,6 +14,7 @@ spec:
       labels:
         name: shipping
         app: shipping
+        version: v1
     spec:
       containers:
       - name: shipping

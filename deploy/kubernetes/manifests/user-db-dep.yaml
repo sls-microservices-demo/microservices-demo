@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         name: user-db
+        app: user-db
+        version: v1
     spec:
       containers:
       - name: user-db

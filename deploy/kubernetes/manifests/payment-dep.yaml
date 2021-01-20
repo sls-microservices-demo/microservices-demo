@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         name: payment
+        app: payment
+        version: v1
     spec:
       containers:
       - name: payment

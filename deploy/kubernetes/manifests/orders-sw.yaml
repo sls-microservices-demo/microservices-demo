@@ -14,6 +14,7 @@ spec:
       labels:
         name: orders-sw
         app: orders
+        version: v1
     spec:
       containers:
       - name: orders-sw
